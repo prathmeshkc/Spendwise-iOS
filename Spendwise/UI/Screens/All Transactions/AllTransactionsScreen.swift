@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct AllTransactionsScreen: View {
+    
+    @StateObject var allTransactionVM = AllTransactionsViewModel()
+    @EnvironmentObject var mainViewModel: MainViewModel
     var body: some View {
-        ZStack {
-            
-        }
-        .background(.surfaceBackground)
+        Text("All Transactions")
     }
 }
 

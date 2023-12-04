@@ -205,12 +205,12 @@ struct AddTransactionScreen: View {
                     }
                     .onSubmit {
                         switch focusField {
-                            case \AddTransactionViewModel.transactionTitle:
-                                focusField = \AddTransactionViewModel.transactionNote
                             case \AddTransactionViewModel.transactionAmount:
                                 focusField = \AddTransactionViewModel.transactionTitle
-                            case \AddTransactionViewModel.transactionNote:
-                                focusField = \AddTransactionViewModel.transactionAmount
+                                
+                            case \AddTransactionViewModel.transactionTitle:
+                                focusField = \AddTransactionViewModel.transactionNote
+                            
                             default:
                                 break
                         }
@@ -229,7 +229,7 @@ struct AddTransactionScreen: View {
                         }
                         
                         ToolbarItem(placement: .topBarTrailing) {
-                            Button(addTransactionViewModel.isUpdating ? "Save" : "Save") {
+                            Button("Save") {
                                 addTransactionViewModel.isUpdating ? addTransactionViewModel.updateTransaction() : addTransactionViewModel.saveTransaction()
                                 
                                 dismiss()
@@ -237,6 +237,7 @@ struct AddTransactionScreen: View {
                             .buttonStyle(GrowingButton())
                             .foregroundStyle(.FAB)
                             .disabled(!addTransactionViewModel.isComplete)
+                            .opacity(addTransactionViewModel.isComplete ? 1.0 : 0.5)
                         }
                         
                         ToolbarItem(placement: .keyboard) {
@@ -256,12 +257,6 @@ struct AddTransactionScreen: View {
                 }
                 .background(.surfaceBackground)
             }
-            //            .task {
-            //                if !addTransactionViewModel.isUpdating {
-            //                    try? await Task.sleep(nanoseconds: 500_000_000)
-            //                    focusField = \AddTransactionViewModel.transactionTitle
-            //                }
-            //            }
         }
     }
 }

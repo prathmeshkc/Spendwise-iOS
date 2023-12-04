@@ -6,7 +6,7 @@
 //
 
 import SwiftUI
-//TODO: Calculate income, expense, balance from the list
+
 struct DashboardScreen: View {
     
     @StateObject var dashboardViewModel = DashboardViewModel()
@@ -15,38 +15,46 @@ struct DashboardScreen: View {
     
     init() {
         // Large Navigation Title
-          UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-          // Inline Navigation Title
-          UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
+        UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
+        // Inline Navigation Title
+        UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
+        
+        //Search Bar Appearance
+//        UISearchBar.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).tintColor = .componentsBackground
+//        
+        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).backgroundColor = .surfaceBackground
+//
+//        UISearchTextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: "Search your transactions", attributes: [.foregroundColor: Colors.HeadingTextColor])
+
     }
     
     var body: some View {
-        
-       NavigationStack {
+        NavigationStack {
             ZStack(alignment: .bottomTrailing) {
                 VStack(alignment: .leading) {
                     
-                    TotalBalanceCard(amountText: -1807.123456, currentTimeFrameText: TransactionFilters.Monthly.rawValue, onTransactionFilterClicked: { filter in
-                    }).padding([.vertical, .horizontal], 12)
+                    TotalBalanceCard(amountText: dashboardViewModel.totalBalanceText, currentTimeFrameText: TransactionFilters.Monthly.rawValue, onTransactionFilterClicked: { filter in
+                    }).padding(.horizontal, 12)
+                        .padding(.vertical, 8)
                     
                     HStack {
-                        TotalIncomeExpenseCard(type: .INCOME, amountText: 3570.00)
-                        TotalIncomeExpenseCard(type: .EXPENSE, amountText: 1767.00)
+                        TotalIncomeExpenseCard(type: .INCOME, amountText: dashboardViewModel.totalIncomeText)
+                        TotalIncomeExpenseCard(type: .EXPENSE, amountText: dashboardViewModel.totalExpenseText)
                     }
-                    .padding([.leading, .trailing], 12)
+                    .padding([.leading, .trailing], 8)
                     .padding(.bottom, 10)
                     
                     HStack(alignment: .center) {
-                        Text("Recent Transaction")
+                        Text("Recent Transactions")
                             .font(.system(size: 16))
                             .fontWeight(.semibold)
                             .foregroundStyle(.detailsText)
                         
                         Spacer()
                         
-                        Button(action: {
-                            //TODO: Navigate to All Transaction Screen
-                        }, label: {
+                        NavigationLink {
+                            AllTransactionsScreen()
+                        } label: {
                             Label(
                                 title: { Text("See All")
                                         .font(.system(size: 14))
@@ -56,23 +64,36 @@ struct DashboardScreen: View {
                             )
                             .labelStyle(.trailingIcon)
                             .foregroundStyle(.FAB)
-                        })
+                        }
                     }
                     .frame(maxWidth: .infinity)
                     .padding(.horizontal, 12)
                     
-                    
-                    //TODO: If isLoading, show shimmer, else show TransactionList. Do it by making an extension on the view struct and creating a private
-                    TransactionList(transactionList: dashboardViewModel.transactionList) { transactionResponse in
-                        formType = .update(transactionResponse)
+                    switch dashboardViewModel.resultState {
+                            
+                        case .loading:
+                            TransactionList(transactionList: DeveloperPreview.instance.transactions, onTransactionListItemClicked: { _ in
+                                
+                            }, isLoading: true)
+                            .padding(.top, -5)
+                            
+                        case .failed(let error):
+                            //                            TODO: Make a custom error view
+                            Text("Something went wrong with error \(error.localizedDescription)!").foregroundStyle(.detailsText)
+                            
+                        case .success(let content):
+                            
+                            TransactionList(transactionList: content) { transactionResponse in
+                                formType = .update(transactionResponse)
+                            }
+                            .padding(.top, -5)
                     }
-                    .padding(.top, -5)
+                    
+                    
                 }
-                
                 
                 Button(action: {
                     formType = .new
-                    
                 }, label: {
                     Image(systemName: "plus")
                         .foregroundStyle(.white)
@@ -85,16 +106,20 @@ struct DashboardScreen: View {
                 .padding(.trailing, 30)
                 .padding(.bottom, 50)
                 .buttonStyle(GrowingButton())
-                .sheet(item: $formType, content: { formType in
+                .sheet(item: $formType, onDismiss: {
+                    dashboardViewModel.getAllTransaction()
+                } , content: { formType in
                     formType
                 })
+                
             }
             .navigationTitle(Text("Home"))
-            .background(.surfaceBackground)
-            .padding(.top, 0)
             .searchable(text: $dashboardViewModel.searchText, prompt: "Search your transactions")
+            .background(.surfaceBackground)
         }
-       .background(.surfaceBackground)
+        .background(.surfaceBackground)
+        
+        
     }
 }
 

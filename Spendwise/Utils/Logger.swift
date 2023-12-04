@@ -31,6 +31,6 @@ class Logger {
                 case .error: logPrefix = "[ERROR]"
             }
             
-            print("\(timestamp) \(logPrefix) \(message)")
+            print("\n\n\(timestamp) \(logPrefix) \(message)\n\n")
         }
 }

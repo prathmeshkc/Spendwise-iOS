@@ -6,37 +6,21 @@
 //
 
 import SwiftUI
-//TODO:Customize the appearance of the Tab items
+import Firebase
+
 @main
 struct SpendwiseApp: App {
+    
+    @StateObject var mainViewModel: MainViewModel = MainViewModel()
+    
+    init() {
+        FirebaseApp.configure()
+    }
+    
     var body: some Scene {
         WindowGroup {
-            TabView {
-                Group {
-                    DashboardScreen()
-                    .tabItem {
-                        Label(
-                            title: { Text("Dashboard") },
-                            icon: {
-                                Image(systemName: "house")
-                            }
-                        )
-                    }
-                    
-                    AllTransactionsScreen()
-                    .tabItem {
-                        Label(
-                            title: { Text("Transactions") },
-                            icon: {
-                                Image(systemName: "creditcard")
-                            }
-                        )
-                    }
-                }
-                .toolbarBackground(Colors.ComponentsBackgroundColor, for: .tabBar)
-                .toolbarBackground(.visible, for: .tabBar)
-            }
-            
+            MainView()
+                .environmentObject(mainViewModel)
         }
         
     }

@@ -23,46 +23,49 @@ struct TotalIncomeExpenseCard: View {
         switch type {
                 
             case .EXPENSE:
-                titleText = "EXPENSE"
-                transactionTypeIcon = "ExpenseIcon"
+                titleText = "Expense"
+                transactionTypeIcon = "arrow.down"
                 amountColor = Colors.RedExpenseColor
                 
             case .INCOME:
-                titleText = "INCOME"
-                transactionTypeIcon = "IncomeIcon"
+                titleText = "Income"
+                transactionTypeIcon = "arrow.up"
                 amountColor = Colors.GreenIncomeColor
         }
         
         return VStack {
             HStack {
-                Text(titleText)
-                    .font(.system(size: 12))
-                    .fontWeight(.semibold)
-                    .foregroundStyle(Colors.HeadingTextColor)
-                    .padding(.leading, 20)
-                    .frame(maxWidth: .infinity, alignment: .leading)
-                
+                ZStack{
+                    Image(systemName: transactionTypeIcon)
+                        .foregroundColor(Color.white)
+                }
+                .frame(width: 40, height: 40)
+                .background(amountColor)
+                .cornerRadius(50)
+                .padding(.trailing, 8)
+                VStack(alignment: .leading) {
+                    Text(titleText)
+                        .font(.headline)
+                        .fontWeight(.bold)
+                        .foregroundColor(amountColor)
+                    Text(amount)
+                        .font(.headline)
+                        .fontWeight(/*@START_MENU_TOKEN@*/.bold/*@END_MENU_TOKEN@*/)
+                        .foregroundColor(.white)
+                }
                 Spacer()
                 
-                Image(transactionTypeIcon)
+                
             }
-            .frame(maxWidth: .infinity)
-            .padding(.trailing, 12)
+            .padding(.all, 15)
             
             
-            Text(amount)
-                .font(.system(size: 20))
-                .fontWeight(.bold)
-                .lineLimit(1)
-                .truncationMode(.tail)
-                .foregroundStyle(amountColor)
-                .padding(.leading, 20)
-                .frame(maxWidth: .infinity, alignment: .leading)
         }
-        .frame(height: 104)
-        .background(Colors.ComponentsBackgroundColor)
-        .clipShape(.rect(cornerRadius: 5))
-        .shadow(radius: 5)
+        .frame(height: 90)
+        .background(amountColor.opacity(0.2))
+        .clipShape(.rect(cornerRadius: 10))
+        .padding(.horizontal, 3)
+        
     }
 }
 
