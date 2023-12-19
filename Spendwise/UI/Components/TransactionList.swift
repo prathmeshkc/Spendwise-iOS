@@ -11,69 +11,83 @@ struct TransactionList: View {
     
     let transactionList: [TransactionResponse]
     let onTransactionListItemClicked: (TransactionResponse) -> Void
-    var isLoading: Bool = false
+    let onTransactionListSwipedToDelete: ((String) -> Void)?
+    var isLimited: Bool = false
     
     var body: some View {
         
         let groupedTransactions = Helper.groupTransactionsByDate(transactionList: transactionList)
         
         ZStack {
-            if isLoading {
-                    List {
-                        ForEach(0..<10, id: \.self) { _ in
-                            ShimmerTransactionListItem()
+            List {
+                ForEach(groupedTransactions.keys.sorted().reversed()
+                    .prefix(isLimited ? 10 : groupedTransactions.keys.count), id: \.self) { dateKey in
+                        Section {
+                            ForEach(groupedTransactions[dateKey]!, id: \.self, content: {  transactionResponse in
+                                TransactionListItem(transactionResponse: transactionResponse, onTransactionListItemClicked: {
+                                    onTransactionListItemClicked(transactionResponse)
+                                })
                                 .listRowInsets(EdgeInsets())
                                 .listRowSeparator(.visible, edges: .all)
-
-                        }
-                        .background(Color.surfaceBackground)
-                    }.listStyle(.plain)
-            } else {
-                List {
-                    ForEach(groupedTransactions.keys.sorted().reversed()
-                        .prefix(10), id: \.self) { dateKey in
-                            Section {
-                                ForEach(groupedTransactions[dateKey]!, id: \.self) { transactionResponse in
-                                    TransactionListItem(transactionResponse: transactionResponse, onTransactionListItemClicked: {
-                                        onTransactionListItemClicked(transactionResponse)
-                                    })
-                                    .listRowInsets(EdgeInsets())
-                                    .listRowSeparator(.visible, edges: .all)
-                                }.background(.surfaceBackground)
-                                
-                            } header: {
-                                VStack {
+                            })
+                            .onDelete(perform: { indexSet in
+                                // Retrieve the item at the specified index from the transactionList
+                                if let firstIndex = indexSet.first, firstIndex < groupedTransactions[dateKey]!.count {
                                     
-                                    HStack {
-                                        Text(dateKey)
-                                            .foregroundStyle(Colors.HeadingTextColor)
-                                        Spacer()
+                                    let transactionToDelete = groupedTransactions[dateKey]![firstIndex]
+                                    Logger.logMessage(message: "TransactionList -> \(transactionToDelete)", logType: .debug)
+                                    if let deleteClosure = onTransactionListSwipedToDelete {
+                                        deleteClosure(transactionToDelete.transactionId)
+                                    } else {
+                                        Logger.logMessage(message: "TransactionList -> No delete closure provided", logType: .error)
                                     }
+                                    
+                                } else {
+                                    Logger.logMessage(message: "TransactionList -> Index out of bounds or invalid", logType: .error)
+                                }
+                                
+                            })
+                            .background(.surfaceBackground)
+                            
+                            
+                            
+                        } header: {
+                            VStack {
+                                
+                                HStack {
+                                    Text(dateKey)
+                                        .foregroundStyle(Colors.HeadingTextColor)
                                     Spacer()
                                 }
-                                .padding(.leading, 12)
-                                .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
-                                .background(Colors.SurfaceBackgroundColor)
-                                
-                            }.background(Colors.SurfaceBackgroundColor)
-                        }
-                    
-                    
-                }
-                .listStyle(.plain)
+                                Spacer()
+                            }
+                            .padding(.leading, 12)
+                            .listRowInsets(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0))
+                            .background(Colors.SurfaceBackgroundColor)
+                            
+                        }.background(Colors.SurfaceBackgroundColor)
+                    }
+                
+                
             }
-            
+            .listStyle(.plain)
         }
         .background(.surfaceBackground)
         
     }
 }
 
+
+
+
 #Preview {
     TransactionList(
         transactionList: DeveloperPreview.instance.transactions,
         onTransactionListItemClicked: { transactionResponse in
             
+        },
+        onTransactionListSwipedToDelete: { transactionId in
         }
+        
     )
 }

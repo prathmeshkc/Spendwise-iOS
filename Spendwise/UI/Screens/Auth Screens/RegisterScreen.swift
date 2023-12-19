@@ -13,6 +13,9 @@ struct RegisterScreen: View {
     @EnvironmentObject var authViewModel: MainViewModel
     @FocusState private var focusField: AnyKeyPath?
     
+    @State private var isAlertPresented: Bool = false
+    @State private var alertText: String = ""
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -21,7 +24,7 @@ struct RegisterScreen: View {
                         ZStack {
                             Image("RegisterScreenImage")
                                 .resizable()
-                                .frame(maxHeight: 330)
+                                .frame(maxHeight: 360)
                             
                             LinearGradient(
                                 gradient: Gradient(colors: [.clear, .surfaceBackground]),
@@ -30,6 +33,7 @@ struct RegisterScreen: View {
                             )
                             .blur(radius: 50)
                         }
+                        
                         Text("Elevate your experience")
                             .font(.headline)
                             .fontWeight(.bold)
@@ -141,7 +145,12 @@ struct RegisterScreen: View {
                         Button(action: {
                             
                             Task {
-                                try await authViewModel.registerUserWithEmailPassword(email: registerViewModel.email, password: registerViewModel.password)
+                                do {
+                                    try await authViewModel.registerUserWithEmailPassword(email: registerViewModel.email, password: registerViewModel.password)
+                                } catch let error {
+                                    isAlertPresented = true
+                                    alertText = error.localizedDescription
+                                }
                             }
                             
                         }) {
@@ -152,6 +161,11 @@ struct RegisterScreen: View {
                                 .background(.FAB)
                                 .cornerRadius(10)
                         }
+                        .alert(Text("\(alertText)"), isPresented: $isAlertPresented, actions: {
+                            Button(role: .cancel) {} label: {
+                                Text("Dismiss")
+                            }
+                        })
                         .disabled(!registerViewModel.canSubmit)
                         .opacity(registerViewModel.canSubmit ? 1.0 : 0.5)
                         
@@ -169,6 +183,7 @@ struct RegisterScreen: View {
                         }
                         
                         
+                        
                     }
                     .background(.surfaceBackground)
                     .scrollContentBackground(.hidden)
@@ -176,6 +191,10 @@ struct RegisterScreen: View {
                 }
                 .scrollIndicators(.hidden)
             }
+            .navigationDestination(isPresented: $authViewModel.sendVerifyEventToLoginScreen, destination: {
+                LoginScreen(isVerifyEmailSheetPresented: true)
+                    .navigationBarBackButtonHidden()
+            })
             .background(.surfaceBackground)
         }
     }

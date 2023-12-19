@@ -9,14 +9,21 @@ import SwiftUI
 
 struct MainView: View {
     
+    enum Tab {
+        case dashboard, analytics, profile
+    }
+    
     @EnvironmentObject var mainViewModel: MainViewModel
+    @AppStorage("isFirstTime") private var isFirstTime: Bool = true
+    
+    @State private var selectedTab: Tab = .dashboard
     
     var body: some View {
         
         ZStack {
-            if mainViewModel.accessToken != nil {
+            if mainViewModel.accessToken != nil && mainViewModel.isEmailVerified  {
                 
-                TabView {
+                TabView(selection: $selectedTab) {
                     Group {
                         DashboardScreen()
                             .tabItem {
@@ -26,6 +33,7 @@ struct MainView: View {
                                     Image(systemName: "house")
                                 }
                             }
+                            .tag(Tab.dashboard)
                         
                         AnalyticsScreen()
                             .tabItem {
@@ -36,6 +44,7 @@ struct MainView: View {
                                 }
                                 
                             }
+                            .tag(Tab.analytics)
                         
                         ProfileScreen()
                             .tabItem {
@@ -45,9 +54,14 @@ struct MainView: View {
                                     Image(systemName: "person.crop.circle")
                                 }
                             }
+                            .tag(Tab.profile)
                     }
                     .toolbarBackground(Colors.ComponentsBackgroundColor, for: .tabBar)
                     .toolbarBackground(.visible, for: .tabBar)
+                }
+                .sheet(isPresented: $isFirstTime) {
+                    IntroScreen()
+                        .interactiveDismissDisabled()
                 }
             } else {
                 RegisterScreen()

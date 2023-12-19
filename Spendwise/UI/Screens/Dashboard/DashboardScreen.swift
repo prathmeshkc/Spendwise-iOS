@@ -18,14 +18,6 @@ struct DashboardScreen: View {
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
         // Inline Navigation Title
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
-        
-        //Search Bar Appearance
-//        UISearchBar.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).tintColor = .componentsBackground
-//        
-        UITextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).backgroundColor = .surfaceBackground
-//
-//        UISearchTextField.appearance(whenContainedInInstancesOf: [UISearchBar.self]).attributedPlaceholder = NSAttributedString(string: "Search your transactions", attributes: [.foregroundColor: Colors.HeadingTextColor])
-
     }
     
     var body: some View {
@@ -33,16 +25,9 @@ struct DashboardScreen: View {
             ZStack(alignment: .bottomTrailing) {
                 VStack(alignment: .leading) {
                     
-                    TotalBalanceCard(amountText: dashboardViewModel.totalBalanceText, currentTimeFrameText: TransactionFilters.Monthly.rawValue, onTransactionFilterClicked: { filter in
-                    }).padding(.horizontal, 12)
+                    TotalBalanceCard(income: dashboardViewModel.totalIncomeText, expense: dashboardViewModel.totalExpenseText)
+                        .padding(.horizontal, 12)
                         .padding(.vertical, 8)
-                    
-                    HStack {
-                        TotalIncomeExpenseCard(type: .INCOME, amountText: dashboardViewModel.totalIncomeText)
-                        TotalIncomeExpenseCard(type: .EXPENSE, amountText: dashboardViewModel.totalExpenseText)
-                    }
-                    .padding([.leading, .trailing], 8)
-                    .padding(.bottom, 10)
                     
                     HStack(alignment: .center) {
                         Text("Recent Transactions")
@@ -72,24 +57,47 @@ struct DashboardScreen: View {
                     switch dashboardViewModel.resultState {
                             
                         case .loading:
-                            TransactionList(transactionList: DeveloperPreview.instance.transactions, onTransactionListItemClicked: { _ in
-                                
-                            }, isLoading: true)
-                            .padding(.top, -5)
+                            ZStack {
+                                List {
+                                    ForEach(0..<7, id: \.self) { _ in
+                                        ShimmerTransactionListItem()
+                                            .listRowInsets(EdgeInsets())
+                                            .listRowSeparator(.visible, edges: .all)
+                                    }
+                                    .background(Color.surfaceBackground)
+                                }.listStyle(.plain)
+                                    .padding(.top, -5)
+                                    .padding(.horizontal)
+                            }.background(.surfaceBackground)
                             
                         case .failed(let error):
-                            //                            TODO: Make a custom error view
-                            Text("Something went wrong with error \(error.localizedDescription)!").foregroundStyle(.detailsText)
+                            ErrorView(error: error) {
+                                self.dashboardViewModel.getAllTransaction()
+                            }
+                            .frame(maxWidth: .infinity, maxHeight: .infinity) // Expand to cover entire screen
+                            .background(Color.surfaceBackground.ignoresSafeArea())
+                            .transition(.move(edge: .bottom))
                             
                         case .success(let content):
                             
-                            TransactionList(transactionList: content) { transactionResponse in
-                                formType = .update(transactionResponse)
+                            if content.isEmpty {
+                                LottieView(animation: .emptyList, loopMode: .loop)
+                            } else {
+                                TransactionList(
+                                    transactionList: content,
+                                    onTransactionListItemClicked: { transactionResponse in
+                                        formType = .update(transactionResponse)
+                                    },
+                                    onTransactionListSwipedToDelete: { transactionId in
+                                        dashboardViewModel.deleteTransaction(transactionId: transactionId)
+                                    },
+                                    isLimited: true
+                                )
+                                .refreshable {
+                                    dashboardViewModel.getAllTransaction()
+                                }
                             }
-                            .padding(.top, -5)
                     }
-                    
-                    
                 }
                 
                 Button(action: {
@@ -111,7 +119,6 @@ struct DashboardScreen: View {
                 } , content: { formType in
                     formType
                 })
-                
             }
             .navigationTitle(Text("Home"))
             .searchable(text: $dashboardViewModel.searchText, prompt: "Search your transactions")

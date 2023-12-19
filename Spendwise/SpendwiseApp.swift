@@ -12,6 +12,9 @@ import Firebase
 struct SpendwiseApp: App {
     
     @StateObject var mainViewModel: MainViewModel = MainViewModel()
+    @StateObject var networkManager = NetworkManager()
+    
+    @State private var showNoConnectionSheet = false
     
     init() {
         FirebaseApp.configure()
@@ -21,6 +24,18 @@ struct SpendwiseApp: App {
         WindowGroup {
             MainView()
                 .environmentObject(mainViewModel)
+                .sheet(isPresented: $showNoConnectionSheet, content: {
+                    NoInternetSheet()
+                        .interactiveDismissDisabled()
+                })
+                .onReceive(networkManager.$isConnected, perform: { connected in
+                    if !connected {
+                        showNoConnectionSheet = true
+                    } else {
+                        showNoConnectionSheet = false
+                    }
+                })
+                
         }
         
     }

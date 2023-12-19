@@ -14,6 +14,10 @@ struct LoginScreen: View {
     @FocusState private var focusField: AnyKeyPath?
     @Environment(\.dismiss) var dismiss
     
+    @State private var isAlertPresented: Bool = false
+    @State private var alertText: String = ""
+    @State var isVerifyEmailSheetPresented: Bool = false
+    
     var body: some View {
         ZStack {
             ScrollView {
@@ -55,17 +59,17 @@ struct LoginScreen: View {
                                     Text(verbatim: "example@domain.com")
                                 })
                                 .keyboardType(.emailAddress)
-                                    .autocorrectionDisabled()
-                                    .textInputAutocapitalization(.never)
-                                    .lineLimit(1)
-                                    .foregroundStyle(.detailsText)
-                                    .onAppear {
-                                        UITextField.appearance().clearButtonMode = .whileEditing
-                                    }
-                                    .focused($focusField, equals: \LoginViewModel.email)
-                                    .onSubmit {
-                                        focusField = \LoginViewModel.password
-                                    }
+                                .autocorrectionDisabled()
+                                .textInputAutocapitalization(.never)
+                                .lineLimit(1)
+                                .foregroundStyle(.detailsText)
+                                .onAppear {
+                                    UITextField.appearance().clearButtonMode = .whileEditing
+                                }
+                                .focused($focusField, equals: \LoginViewModel.email)
+                                .onSubmit {
+                                    focusField = \LoginViewModel.password
+                                }
                             }
                             Text(loginViewModel.emailPrompt)
                                 .font(.system(size: 12))
@@ -101,7 +105,7 @@ struct LoginScreen: View {
                         }
                         .listRowBackground(Colors.ComponentsBackgroundColor)
                         .padding(12)
-
+                        
                     }
                     .padding(.horizontal, 12)
                     
@@ -109,7 +113,16 @@ struct LoginScreen: View {
                     
                     Button(action: {
                         Task {
-                            try await authViewModel.loginUserWithEmailPassword(email: loginViewModel.email, password: loginViewModel.password)
+                            do {
+                                try await authViewModel.loginUserWithEmailPassword(email: loginViewModel.email, password: loginViewModel.password)
+                            } catch EmailNotVerifiedError.emailNotVerified {
+                                isAlertPresented = true
+                                alertText = "Please Verify Email!"
+                                isVerifyEmailSheetPresented = true
+                            } catch let error {
+                                isAlertPresented = true
+                                alertText = error.localizedDescription
+                            }
                         }
                         
                     }) {
@@ -120,6 +133,11 @@ struct LoginScreen: View {
                             .background(.FAB)
                             .cornerRadius(10)
                     }
+                    .alert(Text("\(alertText)"), isPresented: $isAlertPresented, actions: {
+                        Button(role: .cancel) {} label: {
+                            Text("Dismiss")
+                        }
+                    })
                     .disabled(!loginViewModel.canSubmit)
                     .opacity(loginViewModel.canSubmit ? 1.0 : 0.5)
                     
@@ -134,12 +152,17 @@ struct LoginScreen: View {
                                 .fontWeight(.bold)
                         }.font(.system(size: 14))
                     })
-
+                    
                 }
                 .background(.surfaceBackground)
                 .scrollContentBackground(.hidden)
                 
             }
+            .sheet(isPresented: $isVerifyEmailSheetPresented, content: {
+                VerifyEmailSheet()
+                    .presentationDetents([.fraction(0.7)])
+                    .presentationDragIndicator(.visible)
+            })
             .scrollIndicators(.hidden)
         }
         .background(.surfaceBackground)

@@ -28,6 +28,7 @@ struct TransactionRepositoryImpl: TransactionRepository {
                 }
                 
                 if (200...299).contains(response.statusCode) {
+                    Logger.logMessage(message: "TransactionRepositoryImpl::request -> Data: \(data)")
                     return Just(data)
                         .decode(type: T.self, decoder: jsonDecoder)
                         .mapError {_ in .decodingError}

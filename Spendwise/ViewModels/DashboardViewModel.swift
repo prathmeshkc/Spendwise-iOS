@@ -25,6 +25,8 @@ class DashboardViewModel: ObservableObject {
     @Published private(set) var resultState: APIResultState<[TransactionResponse]> = .loading
     var transactionList: [TransactionResponse] = [TransactionResponse]()
     
+    var transactionDeletionStatus: String = ""
+    
     private var cancellableSet: Set<AnyCancellable> = []
     
     init() {
@@ -92,5 +94,33 @@ class DashboardViewModel: ObservableObject {
                 Logger.logMessage(message: "Search Transactions List -> \(self.transactionList)")
             }
         self.cancellableSet.insert(cancellable)
+    }
+    
+    func deleteTransaction(transactionId: String) {
+        let cancellable = self.transactionRepository.request(endpoint: .deleteTransaction(transactionId: transactionId))
+            .sink { [weak self] (res) in
+                
+                guard let self = self else { return }
+                
+                switch res {
+                    case .failure(let error):
+///                        This will throw decoding error because it cannot decode Object sent from the backend
+                        //                        TODO: Show error response like a toast or something
+                        Logger.logMessage(message: "DashboardViewModel::deleteTransaction -> \(error)", logType: .error)
+                        
+                    case .finished:
+
+                        Logger.logMessage(message: "DashboardViewModel::deleteTransaction -> Transaction Deleted Successfully!", logType: .info)
+                        
+                }
+                
+                self.getAllTransaction()
+            } receiveValue: { res in
+                self.transactionDeletionStatus = res
+                
+            }
+        
+        self.cancellableSet.insert(cancellable)
+        
     }
 }

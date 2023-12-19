@@ -24,6 +24,7 @@ class AddTransactionViewModel: ObservableObject {
     @Published var isTransactionNoteCriteriaValid = false
     @Published var isComplete = false
     
+    ///Here the Result we are getting is of type Object. The backend should send TransactionResponse instead of Object. For now I am using String.
     @Published private(set) var resultState: APIResultState<String> = .loading
     var transactionCreationStatus: String = ""
     private var cancellableSet: Set<AnyCancellable> = []

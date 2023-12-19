@@ -20,3 +20,9 @@ struct TransactionResponse: Decodable, Hashable, Identifiable {
         return transactionId
     }
 }
+
+
+struct DeletedTransactionResponse: Decodable {
+    let message: String
+    let transactionResponse: TransactionResponse
+}
