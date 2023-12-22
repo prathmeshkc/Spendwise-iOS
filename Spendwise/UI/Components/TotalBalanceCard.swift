@@ -156,7 +156,7 @@ struct TotalBalanceCard: View {
         }
         .padding([.horizontal, .bottom], 20)
         .padding(.top, 15)
-        .background(.blue.opacity(0.2))
+        .background(.blue.opacity(0.3).gradient)
         .clipShape(.rect(cornerRadius: 10))
         
     }

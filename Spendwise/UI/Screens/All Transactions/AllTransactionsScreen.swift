@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 struct AllTransactionsScreen: View {
     
@@ -71,6 +72,7 @@ struct AllTransactionsScreen: View {
                                 },
                                 onTransactionListSwipedToDelete: { transactionId in
                                     allTransactionVM.deleteTransaction(transactionId: transactionId)
+                                    WidgetCenter.shared.reloadAllTimelines()
                                 }
                             )
                             .padding(.top, -5)

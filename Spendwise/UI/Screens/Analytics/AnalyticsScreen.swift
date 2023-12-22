@@ -21,6 +21,11 @@ struct AnalyticsScreen: View {
     init() {
         UINavigationBar.appearance().largeTitleTextAttributes = [.foregroundColor: UIColor.white]
         UINavigationBar.appearance().titleTextAttributes = [.foregroundColor: UIColor.white]
+        
+        UISegmentedControl.appearance().selectedSegmentTintColor = .FAB
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .selected)
+        UISegmentedControl.appearance().setTitleTextAttributes([.foregroundColor: UIColor.white], for: .normal)
+        UISegmentedControl.appearance().backgroundColor = .componentsBackground
     }
     
     var body: some View {
@@ -28,15 +33,28 @@ struct AnalyticsScreen: View {
             ZStack {
                 VStack {
                     
-                    Button(action: {
-                        showFilterView = true
-                    }, label: {
-                        Text("\(Helper.dateToString(analyticsViewModel.startDate)) - \(Helper.dateToString(analyticsViewModel.endDate))")
-                            .font(.system(size: 16, weight: .semibold))
-                            .foregroundStyle(.gray)
-                    })
-                    .hSpacing(alignment: .leading)
-                    .padding(12)
+                    HStack {
+                        
+                        if analyticsViewModel.chartType == .Donut {
+                            Button(action: {
+                                showFilterView = true
+                            }, label: {
+                                Text("\(Helper.dateToString(analyticsViewModel.startDate)) - \(Helper.dateToString(analyticsViewModel.endDate))")
+                                    .font(.system(size: 16, weight: .semibold))
+                                    .foregroundStyle(.gray)
+                            })
+                        }
+                        
+                        Spacer()
+                        
+                        Picker("Type of Chart", selection: $analyticsViewModel.chartType) {
+                            ForEach(ChartType.allCases) { chartType in
+                                Image(systemName: chartType == .Donut ? "chart.pie.fill" : "chart.bar.fill").tint(.FAB)
+                            }
+                        }
+                        .pickerStyle(.segmented)
+                        .fixedSize()
+                    }.padding(.horizontal, 12)
                     
                     switch analyticsViewModel.resultState {
                             
@@ -71,36 +89,40 @@ struct AnalyticsScreen: View {
                                     Spacer()
                                 }
                             } else {
-                                Chart(analyticsViewModel.expenditurePercentageByCategory) { expenditureByCategory in
-                                    SectorMark(
-                                        angle: .value("Percentage", expenditureByCategory.percentage),
-                                        innerRadius: .ratio(0.65),
-                                        outerRadius: selectedExpenditureByCategory?.category == expenditureByCategory.category ? 175 : 150,
-                                        angularInset: 1
-                                    )
-                                    .foregroundStyle(expenditureByCategory.color)
-                                    .cornerRadius(10)
-                                }
-                                .chartAngleSelection(value: $selectedCount)
-                                .chartBackground { _ in
-                                    if let selectedExpenditureByCategory {
-                                        VStack {
-                                            Text(selectedExpenditureByCategory.category)
-                                                .foregroundStyle(.detailsText)
-                                                .fontWeight(.semibold)
-                                            Text(Helper.formatDoubleWithTwoDecimals(value: selectedExpenditureByCategory.percentage) + "%")
-                                                .foregroundStyle(.detailsText)
-                                                .fontWeight(.semibold)
-                                        }
-                                    } else {
-                                        if !analyticsViewModel.expenditurePercentageByCategory.isEmpty {
-                                            Text("Select a segment")
-                                                .foregroundStyle(.detailsText)
+                                if analyticsViewModel.chartType == .Donut {
+                                    Chart(analyticsViewModel.expenditurePercentageByCategory) { expenditureByCategory in
+                                        SectorMark(
+                                            angle: .value("Percentage", expenditureByCategory.percentage),
+                                            innerRadius: .ratio(0.65),
+                                            outerRadius: selectedExpenditureByCategory?.category == expenditureByCategory.category ? 175 : 150,
+                                            angularInset: 1
+                                        )
+                                        .foregroundStyle(expenditureByCategory.color)
+                                        .cornerRadius(10)
+                                    }
+                                    .chartAngleSelection(value: $selectedCount)
+                                    .chartBackground { _ in
+                                        if let selectedExpenditureByCategory {
+                                            VStack {
+                                                Text(selectedExpenditureByCategory.category)
+                                                    .foregroundStyle(.detailsText)
+                                                    .fontWeight(.semibold)
+                                                Text(Helper.formatDoubleWithTwoDecimals(value: selectedExpenditureByCategory.percentage) + "%")
+                                                    .foregroundStyle(.detailsText)
+                                                    .fontWeight(.semibold)
+                                            }
+                                        } else {
+                                            if !analyticsViewModel.expenditurePercentageByCategory.isEmpty {
+                                                Text("Select a segment")
+                                                    .foregroundStyle(.detailsText)
+                                            }
                                         }
                                     }
+                                    .frame(height: 350)
+                                    .padding()
+                                } else {
+                                    
                                 }
-                                .frame(height: 350)
-                                .padding()
                             }
                     }
                     

@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 struct DashboardScreen: View {
     
@@ -90,6 +91,7 @@ struct DashboardScreen: View {
                                     },
                                     onTransactionListSwipedToDelete: { transactionId in
                                         dashboardViewModel.deleteTransaction(transactionId: transactionId)
+                                        WidgetCenter.shared.reloadAllTimelines()
                                     },
                                     isLimited: true
                                 )
@@ -127,6 +129,43 @@ struct DashboardScreen: View {
         .background(.surfaceBackground)
         
         
+    }
+    @ViewBuilder
+    func HeaderView() -> some View {
+        HStack {
+            
+            Text("Home")
+                .font(.title.bold())
+                .foregroundStyle(.white)
+            
+            Spacer(minLength: 0)
+            
+            Button(action: {
+                formType = .new
+            }, label: {
+                Image(systemName: "plus")
+                    .foregroundStyle(.white)
+                    .font(.title.weight(.semibold))
+                    .padding(12)
+                    .background(.FAB)
+                    .clipShape(.circle)
+                    .shadow(radius: 4, x: 0, y: 4)
+            })
+            .buttonStyle(GrowingButton())
+            .sheet(item: $formType, onDismiss: {
+                dashboardViewModel.getAllTransaction()
+            } , content: { formType in
+                formType
+            })
+        }
+        .padding(.bottom, 5)
+        .padding(.horizontal, 12)
+        //        .background {
+        //            Rectangle()
+        //                .fill(.ultraThinMaterial)
+        //                .padding(.horizontal, -15)
+        //                .padding(.top, -(safeArea.top + 15))
+        //        }
     }
 }
 

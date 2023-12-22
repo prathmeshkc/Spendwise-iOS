@@ -10,6 +10,7 @@ import Combine
 
 protocol TransactionRepository {
     func request<T: Decodable>(endpoint: TransactionAPI) -> AnyPublisher<T, APIError>
+    func requestWithClosure<T: Decodable>(endpoint: TransactionAPI, completion: @escaping (Result<T, APIError>) -> Void)
 }
 
 struct TransactionRepositoryImpl: TransactionRepository {
@@ -40,5 +41,43 @@ struct TransactionRepositoryImpl: TransactionRepository {
                 
             }.eraseToAnyPublisher()
     }
+    
+    
+    func requestWithClosure<T>(endpoint: TransactionAPI, completion: @escaping (Result<T, APIError>) -> Void) where T: Decodable {
+        
+            let jsonDecoder = JSONDecoder()
+            
+            URLSession.shared.dataTask(with: endpoint.urlRequest) { data, response, error in
+                guard error != nil else {
+                    completion(.failure(.unknown))
+                    return
+                }
+                
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    completion(.failure(.unknown))
+                    return
+                }
+                
+                guard (200...299).contains(httpResponse.statusCode) else {
+                    completion(.failure(.errorCode(httpResponse.statusCode)))
+                    return
+                }
+                
+                if let data = data {
+                    do {
+                        let decodedData = try jsonDecoder.decode(T.self, from: data)
+                        Logger.logMessage(message: "TransactionRepositoryImpl::requestWithClosure -> Data: \(decodedData)")
+                        completion(.success(decodedData))
+                    } catch {
+                        Logger.logMessage(message: "TransactionRepositoryImpl::requestWithClosure -> Failed Response")
+                        completion(.failure(.decodingError))
+                    }
+                } else {
+                    completion(.failure(.unknown))
+                }
+            }.resume()
+        }
+    
+//    TODO: Try with async-await
     
 }

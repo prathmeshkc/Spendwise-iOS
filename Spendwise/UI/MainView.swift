@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 struct MainView: View {
     
@@ -62,6 +63,9 @@ struct MainView: View {
                 .sheet(isPresented: $isFirstTime) {
                     IntroScreen()
                         .interactiveDismissDisabled()
+                }
+                .onAppear {
+                    WidgetCenter.shared.reloadAllTimelines()
                 }
             } else {
                 RegisterScreen()

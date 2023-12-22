@@ -15,6 +15,8 @@ class AnalyticsViewModel: ObservableObject {
     @Published var startDate: Date = .now.startOfMonth
     @Published var endDate: Date = .now.endOfMonth
     
+    @Published var chartType: ChartType = .Donut
+    
     @Published private(set) var resultState: APIResultState<[TransactionResponse]> = .loading
     private var expenseTransactionList: [TransactionResponse] = [TransactionResponse]()
     var expenditurePercentageByCategory: [ExpenditureByCategory] = [ExpenditureByCategory]()

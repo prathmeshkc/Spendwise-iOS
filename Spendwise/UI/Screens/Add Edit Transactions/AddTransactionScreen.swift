@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import WidgetKit
 
 struct AddTransactionScreen: View {
     
@@ -233,6 +234,7 @@ struct AddTransactionScreen: View {
                                 addTransactionViewModel.isUpdating ? addTransactionViewModel.updateTransaction() : addTransactionViewModel.saveTransaction()
                                 
                                 dismiss()
+                                WidgetCenter.shared.reloadAllTimelines()
                             }
                             .buttonStyle(GrowingButton())
                             .foregroundStyle(.FAB)
