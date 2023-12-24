@@ -236,6 +236,7 @@
 		40D864352AEDDACB00072E7E /* SearchFilters.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchFilters.swift; sourceTree = "<group>"; };
 		40E1BCE02B07B71800165508 /* FormType.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FormType.swift; sourceTree = "<group>"; };
 		40E1BCE22B07E2D600165508 /* Logger.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logger.swift; sourceTree = "<group>"; };
+		40E7CA4E2B37CFD30058EDDF /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		40E818AB2B0AD80F00F90E17 /* NumbersOnlyViewModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumbersOnlyViewModifier.swift; sourceTree = "<group>"; };
 		40E819112B0F4BB300F90E17 /* AddTransactionForm2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddTransactionForm2.swift; sourceTree = "<group>"; };
 		40EAFA442B0FFF5F00E668D0 /* RegisterScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterScreen.swift; sourceTree = "<group>"; };
@@ -509,6 +510,7 @@
 		40A43F612AE18FAC004A248B = {
 			isa = PBXGroup;
 			children = (
+				40E7CA4E2B37CFD30058EDDF /* README.md */,
 				40A737AE2B35648D004FF476 /* StatsWidgetExtension.entitlements */,
 				40A43F6C2AE18FAC004A248B /* Spendwise */,
 				40A7378C2B350A43004FF476 /* StatsWidget */,
