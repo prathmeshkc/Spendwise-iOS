@@ -23,13 +23,8 @@ Take control of your finances with Spendwise, an intuitive expense tracker Andro
 
 |  Feature   | Tech |
 |----------------	|------------------------------	|
-| <img height="20" src="https://3.bp.blogspot.com/-VVp3WvJvl84/X0Vu6EjYqDI/AAAAAAAAPjU/ZOMKiUlgfg8ok8DY8Hc-ocOvGdB0z86AgCLcBGAsYHQ/s1600/jetpack%2Bcompose%2Bicon_RGB.png">    UI Framework  | [Jetpack Compose](https://www.jetbrains.com/lp/compose-multiplatform/)         |                        |
-| 💉 DI                | [Dagger-Hilt](https://developer.android.com/training/dependency-injection/hilt-android)                        |             |
-| 🌐 Networking        | [Retrofit](https://github.com/square/retrofit)                   |
-| :compass: Navigation       |  [Compose Destinations Navigation](https://developer.android.com/jetpack/compose/navigation) |
-| :thread: Asynchronous Work     |  [Coroutines](https://kotlinlang.org/docs/reference/coroutines-overview.html)|
+| <img height="20" src="https://developer.apple.com/assets/elements/icons/swiftui/swiftui-96x96_2x.png">    UI Framework  | [SwiftUI](https://developer.apple.com/documentation/swiftui/)         |                        |
 | <img height="20" src="https://res.cloudinary.com/prathmeshc/image/upload/v1697512587/1611674_mufi3x.png">    Authentication  | [Firebase](https://firebase.google.com/)         |                        |
-| <img height="20" src="https://res.cloudinary.com/prathmeshc/image/upload/v1697513029/Screenshot_2023-10-16_at_11.23.44_PM_k3slwi.png">     Push Notification     |  [Firebase Cloud Messaging](https://firebase.google.com/docs/cloud-messaging)|
 
 ## 🛠 Backend Built With
 
@@ -48,32 +43,26 @@ Take control of your finances with Spendwise, an intuitive expense tracker Andro
   <tr>
     <th>Home Screen</th>
     <th>All Transaction Screen</th> 
-    <th>Details Screen</th> 
+    <th>Add/Edit Transaction</th>
   </tr>
   <tr>
-    <td><img src = "https://res.cloudinary.com/prathmeshc/image/upload/v1697514741/DashboardScreen_skj6ca.png" width=240/></td> 
-    <td><img src = "https://res.cloudinary.com/prathmeshc/image/upload/v1697514740/AllTransactionScreen_rlbptk.png" width=240/></td>
-    <td><img src = "https://res.cloudinary.com/prathmeshc/image/upload/v1697514742/DetailsScreen_vft3pp.png" width=240/></td>
+    <td><img src = "https://res.cloudinary.com/prathmeshc/image/upload/v1703541411/Spendwise-iOS/Simulator_Screenshot_-_iPhone_15_Pro_-_2023-12-25_at_16.49.11_urciu8.png" width=240/></td> 
+    <td><img src = "https://res.cloudinary.com/prathmeshc/image/upload/v1703541562/Spendwise-iOS/Simulator_Screenshot_-_iPhone_15_Pro_-_2023-12-25_at_16.59.08_kbgf7g.png" width=240/></td>
+    <td><img src = "https://res.cloudinary.com/prathmeshc/image/upload/v1703541625/Spendwise-iOS/Simulator_Screenshot_-_iPhone_15_Pro_-_2023-12-25_at_17.00.10_hbwp98.png" width=240/></td> 
+
   </tr>
   
   <tr>
-    <th>Add Transaction</th>
-    <th>Insights</th> 
-    <th>Push Notification Sample</th> 
-  </tr>
-  <tr>
-    <td><img src = "https://res.cloudinary.com/prathmeshc/image/upload/v1697514740/AddEditTransactionScreen_douktk.png" width=240/></td> 
-    <td><img src = "https://res.cloudinary.com/prathmeshc/image/upload/v1697514741/Chart_bg6dmi.png" width=240/></td>
-    <td><img src = "https://res.cloudinary.com/prathmeshc/image/upload/v1697515488/IMG-20230911-WA0008_q6cmu6.jpg" width=240/></td>
-  </tr>
-  <tr>
+    <th>Insights</th>
     <th>Register Screen</th>
     <th>Login Screen</th> 
   </tr>
   <tr>
-    <td><img src = "https://res.cloudinary.com/prathmeshc/image/upload/v1697514742/RegisterScreen_co7ilh.png" width=240/></td> 
-    <td><img src = "https://res.cloudinary.com/prathmeshc/image/upload/v1697514742/LoginScreen_j3tevw.png" width=240/></td>
+        <td><img src = "https://res.cloudinary.com/prathmeshc/image/upload/v1703539282/Spendwise-iOS/Simulator_Screenshot_-_iPhone_15_Pro_-_2023-12-16_at_18.09.12_qc2cqe.png" width=240/></td>
+    <td><img src = "https://res.cloudinary.com/prathmeshc/image/upload/v1703539280/Spendwise-iOS/Register_jaqpii.png" width=240/></td> 
+    <td><img src = "https://res.cloudinary.com/prathmeshc/image/upload/v1703539280/Spendwise-iOS/Simulator_Screenshot_-_iPhone_15_Pro_-_2023-12-16_at_18.06.27_hvu5ew.png" width=240/></td>
   </tr>
+ 
 </table>
 <br>
 
