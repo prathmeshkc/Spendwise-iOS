@@ -32,6 +32,8 @@
 		406BFDBA2B1D3531009B9022 /* AnalyticsScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406BFDB92B1D3531009B9022 /* AnalyticsScreen.swift */; };
 		406BFDBC2B1D364F009B9022 /* ProfileScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406BFDBB2B1D364F009B9022 /* ProfileScreen.swift */; };
 		406BFDBF2B1D65B0009B9022 /* ShimmerEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406BFDBE2B1D65B0009B9022 /* ShimmerEffect.swift */; };
+		409FDDED2B40F33A00047572 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 409FDDEC2B40F33A00047572 /* KeychainAccess */; };
+		409FDDEF2B40F3B600047572 /* KeychainStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409FDDEE2B40F3B600047572 /* KeychainStorage.swift */; };
 		40A07D472B1E729A00B1A1B8 /* SearchRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A07D462B1E729A00B1A1B8 /* SearchRepository.swift */; };
 		40A43F6E2AE18FAC004A248B /* SpendwiseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A43F6D2AE18FAC004A248B /* SpendwiseApp.swift */; };
 		40A43F722AE18FAE004A248B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 40A43F712AE18FAE004A248B /* Assets.xcassets */; };
@@ -182,6 +184,7 @@
 		406BFDB92B1D3531009B9022 /* AnalyticsScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnalyticsScreen.swift; sourceTree = "<group>"; };
 		406BFDBB2B1D364F009B9022 /* ProfileScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileScreen.swift; sourceTree = "<group>"; };
 		406BFDBE2B1D65B0009B9022 /* ShimmerEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShimmerEffect.swift; sourceTree = "<group>"; };
+		409FDDEE2B40F3B600047572 /* KeychainStorage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = KeychainStorage.swift; sourceTree = "<group>"; };
 		40A07D462B1E729A00B1A1B8 /* SearchRepository.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchRepository.swift; sourceTree = "<group>"; };
 		40A43F6A2AE18FAC004A248B /* Spendwise.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Spendwise.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		40A43F6D2AE18FAC004A248B /* SpendwiseApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SpendwiseApp.swift; sourceTree = "<group>"; };
@@ -258,6 +261,7 @@
 				40A737382B293E2E004FF476 /* FirebaseAppDistribution-Beta in Frameworks */,
 				40A7373C2B293E2E004FF476 /* FirebaseAuthCombine-Community in Frameworks */,
 				40A737482B293E2E004FF476 /* FirebaseFirestoreCombine-Community in Frameworks */,
+				409FDDED2B40F33A00047572 /* KeychainAccess in Frameworks */,
 				40A737322B293E2E004FF476 /* FirebaseAnalyticsSwift in Frameworks */,
 				40A737562B293E2E004FF476 /* FirebaseMLModelDownloader in Frameworks */,
 				40A737342B293E2E004FF476 /* FirebaseAnalyticsWithoutAdIdSupport in Frameworks */,
@@ -416,6 +420,7 @@
 				40A737752B2D73D5004FF476 /* Encodable+Extensions.swift */,
 				40A7377A2B2E1E5B004FF476 /* NetworkManager.swift */,
 				40A737802B327D58004FF476 /* EnumUtil.swift */,
+				409FDDEE2B40F3B600047572 /* KeychainStorage.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -674,6 +679,7 @@
 				40A7375D2B293E2E004FF476 /* FirebaseRemoteConfigSwift */,
 				40A7375F2B293E2E004FF476 /* FirebaseStorage */,
 				40A737612B293E2E004FF476 /* FirebaseStorageCombine-Community */,
+				409FDDEC2B40F33A00047572 /* KeychainAccess */,
 			);
 			productName = Spendwise;
 			productReference = 40A43F6A2AE18FAC004A248B /* Spendwise.app */;
@@ -726,6 +732,7 @@
 			packageReferences = (
 				40AC2BFC2B20043E00E93414 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				40A7372C2B293E2E004FF476 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				409FDDEB2B40F33A00047572 /* XCRemoteSwiftPackageReference "KeychainAccess" */,
 			);
 			productRefGroup = 40A43F6B2AE18FAC004A248B /* Products */;
 			projectDirPath = "";
@@ -823,6 +830,7 @@
 				40515AE52AEA267F00193AA1 /* TransactionRequest.swift in Sources */,
 				406BFDB32B196739009B9022 /* TransactionRepository.swift in Sources */,
 				400B24592AFD7BB900109028 /* AddTransactionScreen.swift in Sources */,
+				409FDDEF2B40F3B600047572 /* KeychainStorage.swift in Sources */,
 				40A737722B2D6DB0004FF476 /* User.swift in Sources */,
 				40AC2C002B20048900E93414 /* LottieView.swift in Sources */,
 				400D673E2AEF0697002A6642 /* TrailingIconLabelStyle.swift in Sources */,
@@ -1146,6 +1154,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		409FDDEB2B40F33A00047572 /* XCRemoteSwiftPackageReference "KeychainAccess" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/kishikawakatsumi/KeychainAccess";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
 		40A7372C2B293E2E004FF476 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
@@ -1165,6 +1181,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		409FDDEC2B40F33A00047572 /* KeychainAccess */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 409FDDEB2B40F33A00047572 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
+			productName = KeychainAccess;
+		};
 		40A7372D2B293E2E004FF476 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 40A7372C2B293E2E004FF476 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;

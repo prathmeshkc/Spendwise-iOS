@@ -13,16 +13,15 @@
 import Foundation
 import FirebaseAuth
 import FirebaseFirestore
-
+import SwiftUI
 
 class MainViewModel: ObservableObject {
     
-    @Published var accessToken: String? = nil
+    @KeychainStorage("TOKEN") var accessToken: String = "N/A"
     @Published var isEmailVerified: Bool = false
     @Published var sendVerifyEventToLoginScreen: Bool = false
     
     init() {
-        self.accessToken = UserDefaults.standard.string(forKey: "TOKEN")
         self.isEmailVerified = UserDefaults.standard.bool(forKey: "EMAIL_VERIFICATION_STATUS")
     }
     
@@ -43,7 +42,7 @@ class MainViewModel: ObservableObject {
                 self.sendVerifyEventToLoginScreen = true
             }
             
-//            Save user to a firestore document
+            //            Save user to a firestore document
             self.insertUserRecord(userId: userId, email: email)
             
             Logger.logMessage(message: "MainViewModel::registerUserWithEmailPassword -> token(\(token))\n\tuserId(\(userId))", logType: .info)
@@ -65,9 +64,8 @@ class MainViewModel: ObservableObject {
         //            save the token only if the email is verified and save the email verification status
         if user.isEmailVerified {
             DispatchQueue.main.async {
-                UserDefaults.standard.set(token as String, forKey: "TOKEN")
                 UserDefaults.standard.set(true, forKey: "EMAIL_VERIFICATION_STATUS")
-                self.accessToken = UserDefaults.standard.string(forKey: "TOKEN")
+                self.accessToken = token
                 self.isEmailVerified = UserDefaults.standard.bool(forKey: "EMAIL_VERIFICATION_STATUS")
             }
         } else {
@@ -81,8 +79,7 @@ class MainViewModel: ObservableObject {
         do {
             try Auth.auth().signOut()
             DispatchQueue.main.async {
-                UserDefaults.standard.removeObject(forKey: "TOKEN")
-                self.accessToken = nil
+                self.accessToken = "N/A"
             }
         } catch {
             print("Error: \(error)")
