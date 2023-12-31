@@ -17,11 +17,12 @@ import SwiftUI
 
 class MainViewModel: ObservableObject {
     
-    @KeychainStorage("TOKEN") var accessToken: String = "N/A"
+    @Published var accessToken: String? = nil
     @Published var isEmailVerified: Bool = false
     @Published var sendVerifyEventToLoginScreen: Bool = false
     
     init() {
+        self.accessToken = UserDefaults.standard.string(forKey: "TOKEN")
         self.isEmailVerified = UserDefaults.standard.bool(forKey: "EMAIL_VERIFICATION_STATUS")
     }
     
@@ -64,8 +65,9 @@ class MainViewModel: ObservableObject {
         //            save the token only if the email is verified and save the email verification status
         if user.isEmailVerified {
             DispatchQueue.main.async {
+                UserDefaults.standard.set(token as String, forKey: "TOKEN")
                 UserDefaults.standard.set(true, forKey: "EMAIL_VERIFICATION_STATUS")
-                self.accessToken = token
+                self.accessToken = UserDefaults.standard.string(forKey: "TOKEN")
                 self.isEmailVerified = UserDefaults.standard.bool(forKey: "EMAIL_VERIFICATION_STATUS")
             }
         } else {
@@ -79,7 +81,8 @@ class MainViewModel: ObservableObject {
         do {
             try Auth.auth().signOut()
             DispatchQueue.main.async {
-                self.accessToken = "N/A"
+                UserDefaults.standard.removeObject(forKey: "TOKEN")
+                self.accessToken = nil
             }
         } catch {
             print("Error: \(error)")

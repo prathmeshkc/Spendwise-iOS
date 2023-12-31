@@ -22,7 +22,7 @@ struct MainView: View {
     var body: some View {
         
         ZStack {
-            if mainViewModel.accessToken != "N/A" && mainViewModel.isEmailVerified  {
+            if mainViewModel.accessToken != nil && mainViewModel.isEmailVerified  {
                 
                 TabView(selection: $selectedTab) {
                     Group {
