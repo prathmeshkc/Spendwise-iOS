@@ -13,7 +13,7 @@
 import Foundation
 import FirebaseAuth
 import FirebaseFirestore
-import SwiftUI
+
 
 class MainViewModel: ObservableObject {
     
@@ -88,6 +88,8 @@ class MainViewModel: ObservableObject {
             print("Error: \(error)")
         }
     }
+    
+    
     
     
     private func insertUserRecord(userId: String, email: String) {

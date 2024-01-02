@@ -34,6 +34,10 @@
 		406BFDBF2B1D65B0009B9022 /* ShimmerEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 406BFDBE2B1D65B0009B9022 /* ShimmerEffect.swift */; };
 		409FDDED2B40F33A00047572 /* KeychainAccess in Frameworks */ = {isa = PBXBuildFile; productRef = 409FDDEC2B40F33A00047572 /* KeychainAccess */; };
 		409FDDEF2B40F3B600047572 /* KeychainStorage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 409FDDEE2B40F3B600047572 /* KeychainStorage.swift */; };
+		409FDDF12B434B5700047572 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = 409FDDF02B434B5700047572 /* FirebaseAnalytics */; };
+		409FDDF32B434B7B00047572 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 409FDDF22B434B7B00047572 /* FirebaseAuth */; };
+		409FDDF52B434B7B00047572 /* FirebaseAuthCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 409FDDF42B434B7B00047572 /* FirebaseAuthCombine-Community */; };
+		409FDDF72B434B7B00047572 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = 409FDDF62B434B7B00047572 /* FirebaseCrashlytics */; };
 		40A07D472B1E729A00B1A1B8 /* SearchRepository.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A07D462B1E729A00B1A1B8 /* SearchRepository.swift */; };
 		40A43F6E2AE18FAC004A248B /* SpendwiseApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 40A43F6D2AE18FAC004A248B /* SpendwiseApp.swift */; };
 		40A43F722AE18FAE004A248B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 40A43F712AE18FAE004A248B /* Assets.xcassets */; };
@@ -292,6 +296,10 @@
 			files = (
 				40A7378B2B350A43004FF476 /* SwiftUI.framework in Frameworks */,
 				40A737892B350A43004FF476 /* WidgetKit.framework in Frameworks */,
+				409FDDF12B434B5700047572 /* FirebaseAnalytics in Frameworks */,
+				409FDDF72B434B7B00047572 /* FirebaseCrashlytics in Frameworks */,
+				409FDDF32B434B7B00047572 /* FirebaseAuth in Frameworks */,
+				409FDDF52B434B7B00047572 /* FirebaseAuthCombine-Community in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -698,6 +706,12 @@
 			dependencies = (
 			);
 			name = StatsWidgetExtension;
+			packageProductDependencies = (
+				409FDDF02B434B5700047572 /* FirebaseAnalytics */,
+				409FDDF22B434B7B00047572 /* FirebaseAuth */,
+				409FDDF42B434B7B00047572 /* FirebaseAuthCombine-Community */,
+				409FDDF62B434B7B00047572 /* FirebaseCrashlytics */,
+			);
 			productName = StatsWidgetExtension;
 			productReference = 40A737862B350A43004FF476 /* StatsWidgetExtension.appex */;
 			productType = "com.apple.product-type.app-extension";
@@ -1185,6 +1199,26 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 409FDDEB2B40F33A00047572 /* XCRemoteSwiftPackageReference "KeychainAccess" */;
 			productName = KeychainAccess;
+		};
+		409FDDF02B434B5700047572 /* FirebaseAnalytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 40A7372C2B293E2E004FF476 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAnalytics;
+		};
+		409FDDF22B434B7B00047572 /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 40A7372C2B293E2E004FF476 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+		409FDDF42B434B7B00047572 /* FirebaseAuthCombine-Community */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 40A7372C2B293E2E004FF476 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = "FirebaseAuthCombine-Community";
+		};
+		409FDDF62B434B7B00047572 /* FirebaseCrashlytics */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 40A7372C2B293E2E004FF476 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCrashlytics;
 		};
 		40A7372D2B293E2E004FF476 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
