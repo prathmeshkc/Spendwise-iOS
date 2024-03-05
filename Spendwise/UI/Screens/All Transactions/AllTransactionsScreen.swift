@@ -75,15 +75,16 @@ struct AllTransactionsScreen: View {
                                     WidgetCenter.shared.reloadAllTimelines()
                                 }
                             )
+                            .refreshable {
+                                allTransactionVM.getAllTransaction(startDate: allTransactionVM.startDate.toString, endDate: allTransactionVM.endDate.toString)
+                            }
                             .padding(.top, -5)
                             .sheet(item: $formType, onDismiss: {
                                 allTransactionVM.getAllTransaction(startDate: allTransactionVM.startDate.toString, endDate: allTransactionVM.endDate.toString)
                             } , content: { formType in
                                 formType
                             })
-                            .refreshable {
-                                allTransactionVM.getAllTransaction(startDate: allTransactionVM.startDate.toString, endDate: allTransactionVM.endDate.toString)
-                            }
+                            
                         }
                 }
                 

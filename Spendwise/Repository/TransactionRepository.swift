@@ -82,7 +82,7 @@ struct TransactionRepositoryImpl: TransactionRepository {
     
     
     
-    private func refreshTokenAndRetry<T>(endpoint: TransactionAPI, decoder: JSONDecoder) -> AnyPublisher<T, APIError> where T: Decodable {
+    public func refreshTokenAndRetry<T>(endpoint: TransactionAPI, decoder: JSONDecoder) -> AnyPublisher<T, APIError> where T: Decodable {
         return Future { promise in
             Task {
                 do {

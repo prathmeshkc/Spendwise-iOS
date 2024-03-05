@@ -13,9 +13,13 @@
 import Foundation
 import FirebaseAuth
 import FirebaseFirestore
+import Firebase
+import GoogleSignIn
 
 
 class MainViewModel: ObservableObject {
+    
+    let db = Firestore.firestore()
     
     @Published var accessToken: String? = nil
     @Published var isEmailVerified: Bool = false
@@ -89,7 +93,44 @@ class MainViewModel: ObservableObject {
         }
     }
     
-    
+    func signInWithGoogle(gidSignInResult: GIDSignInResult) async throws {
+        
+        
+        
+        let user = gidSignInResult.user
+        guard let idToken = user.idToken else {return}
+        
+        let accessToken = user.accessToken
+        
+        let authCredential = GoogleAuthProvider.credential(withIDToken: idToken.tokenString, accessToken: accessToken.tokenString)
+        
+        do {
+            let authResult = try await Auth.auth().signIn(with: authCredential)
+            let user = authResult.user
+            let tokenResult = try await user.getIDTokenResult(forcingRefresh: true)
+            let token = tokenResult.token
+            print("Token -> \(token)")
+            let userId = tokenResult.claims["user_id"] as? String ?? ""
+            
+            //If userId not present in the firestore, user is registering else loging in
+            let ifUserExists = try await checkIfUserExists(userId: userId)
+            
+            if !ifUserExists {
+                let userEmail = user.email ?? ""
+                self.insertUserRecord(userId: userId, email: userEmail)
+            }
+            
+            DispatchQueue.main.async {
+                UserDefaults.standard.set(token as String, forKey: "TOKEN")
+                UserDefaults.standard.set(true, forKey: "EMAIL_VERIFICATION_STATUS")
+                self.accessToken = UserDefaults.standard.string(forKey: "TOKEN")
+                self.isEmailVerified = UserDefaults.standard.bool(forKey: "EMAIL_VERIFICATION_STATUS")
+            }
+            
+        } catch {
+            Logger.logMessage(message: "MainViewModel::signInWithGoogle -> Error: \(error)", logType: .error)
+        }
+    }
     
     
     private func insertUserRecord(userId: String, email: String) {
@@ -100,11 +141,16 @@ class MainViewModel: ObservableObject {
             joinedAt: Date().timeIntervalSince1970
         )
         
-        let db = Firestore.firestore()
         
-        db.collection("users")
+        self.db.collection("users")
             .document(userId)
             .setData(newUser.asDictionary())
+    }
+    
+    private func checkIfUserExists(userId: String) async throws -> Bool {
+        let documentRef = self.db.collection("users").document(userId)
+        let document = try await documentRef.getDocument()
+        return document.exists
     }
     
 }

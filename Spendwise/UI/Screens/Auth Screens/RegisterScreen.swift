@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import FirebaseCore
+import GoogleSignIn
 
 struct RegisterScreen: View {
     
@@ -34,16 +36,19 @@ struct RegisterScreen: View {
                             .blur(radius: 50)
                         }
                         
-                        Text("Elevate your experience")
-                            .font(.headline)
-                            .fontWeight(.bold)
-                            .foregroundStyle(.white)
+                        VStack {
+                            Text("Elevate your experience")
+                                .font(.headline)
+                                .fontWeight(.bold)
+                                .foregroundStyle(.white)
+                            
+                            Text("Achieve financial freedom with our feature rich expense tracker app, your friendly neighborhood budget tracker")
+                                .font(.subheadline)
+                                .multilineTextAlignment(.center)
+                                .foregroundStyle(.gray)
+                                .padding(.horizontal, 20)
+                        }
                         
-                        Text("Achieve financial freedom with our feature rich expense tracker app, your friendly neighborhood budget tracker")
-                            .font(.subheadline)
-                            .multilineTextAlignment(.center)
-                            .foregroundStyle(.gray)
-                            .padding(.horizontal, 20)
                         
                         VStack {
                             VStack {
@@ -140,7 +145,6 @@ struct RegisterScreen: View {
                         }
                         .padding(.horizontal, 12)
                         
-                        Spacer(minLength: 12)
                         
                         Button(action: {
                             
@@ -169,7 +173,65 @@ struct RegisterScreen: View {
                         .disabled(!registerViewModel.canSubmit)
                         .opacity(registerViewModel.canSubmit ? 1.0 : 0.5)
                         
-                        Spacer(minLength: 24)
+                        HStack {
+                            VStack {
+                                Divider()
+                                    .frame(height: 2)
+                            }
+                            
+                            Text("OR")
+                                .font(.system(size: 12, weight: .bold))
+                                .foregroundStyle(.detailsText)
+                                
+                            VStack {
+                                Divider()
+                                    .frame(height: 2)
+                            }
+                        }.padding(.horizontal, 50)
+                        
+                        Button( action:{
+                            //        get app client id
+                            guard let clientID = FirebaseApp.app()?.options.clientID else { return }
+                            
+                            //Create Google Sign In configuration object
+                            let config = GIDConfiguration(clientID: clientID)
+                            GIDSignIn.sharedInstance.configuration = config
+                            
+                            let topVC = Application_utility.rootViewController
+                            
+                            
+                            Task {
+                                do {
+                                    let gidSignInResult = try await GIDSignIn.sharedInstance.signIn(withPresenting: topVC)
+                                    try await authViewModel.signInWithGoogle(gidSignInResult: gidSignInResult)
+                                } catch let error {
+                                    isAlertPresented = true
+                                    alertText = error.localizedDescription
+                                }
+                            }
+                        }) {
+                            HStack {
+                                Image("google")
+                                    .resizable()
+                                    .frame(width: 20, height: 20)
+                                Text("Sign In With Google")
+                                    .font(.system(size: 16, weight: .bold))
+                                    .foregroundColor(.white)
+                            }
+                            .padding(15)
+                            .background(Colors.SurfaceBackgroundColor)
+                            .cornerRadius(5)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 25)
+                                    .stroke(Color.gray, lineWidth: 2)
+                            )
+                        }
+                        .alert(Text("\(alertText)"), isPresented: $isAlertPresented, actions: {
+                            Button(role: .cancel) {} label: {
+                                Text("Dismiss")
+                            }
+                        })
+
                         
                         NavigationLink {
                             LoginScreen()
@@ -201,5 +263,23 @@ struct RegisterScreen: View {
 }
 
 #Preview {
-    RegisterScreen()
+    //    RegisterScreen()
+    VStack {
+        HStack {
+            Image("google")
+                .resizable()
+                .frame(width: 20, height: 20)
+            Text("Sign In With Google")
+            
+                .font(.system(size: 16, weight: .bold))
+                .foregroundColor(.black)
+        }
+        .padding(15)
+        .background(Color.white)
+        .cornerRadius(5)
+        .overlay(
+            RoundedRectangle(cornerRadius: 25)
+                .stroke(Color.gray, lineWidth: 2)
+        )
+    }
 }

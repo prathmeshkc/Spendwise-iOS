@@ -12,6 +12,7 @@ protocol SearchRepository {
     func request<T: Decodable>(endpoint: SearchAPI) -> AnyPublisher<T, APIError>
 }
 
+//TODO: Add refreshTokenAndRetry
 
 struct SearchRepositoryImpl: SearchRepository {
     
